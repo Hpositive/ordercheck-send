@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, X, MapPin, Layers, MessageSquare, ArrowRight, Building2 } from 'lucide-react';
 import Header from '../../components/Header';
 import Loading from '../../components/Loading';
 import { fetchPartner, createOrder } from '../../api';
@@ -15,6 +15,7 @@ export default function OrderCreatePage() {
   const [partner, setPartner] = useState<Partner | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [attempted, setAttempted] = useState(false);
 
   const [siteName, setSiteName] = useState('');
   const [siteAddress, setSiteAddress] = useState('');
@@ -54,6 +55,8 @@ export default function OrderCreatePage() {
   };
 
   const handleSubmit = async () => {
+    setAttempted(true);
+
     if (!partner || !siteName.trim() || !siteAddress.trim()) return;
 
     const validItems = items.filter((item) => item.name.trim() && item.quantity > 0);
@@ -84,6 +87,11 @@ export default function OrderCreatePage() {
     siteAddress.trim() !== '' &&
     items.some((item) => item.name.trim() && item.quantity > 0);
 
+  const inputClass = (hasError: boolean) =>
+    `w-full bg-gray-50 border rounded-xl px-4 py-3 text-[14px] text-gray-900 placeholder-gray-300 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white ${
+      hasError ? 'border-red-300 bg-red-50/30' : 'border-gray-100'
+    }`;
+
   if (loading) {
     return (
       <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen">
@@ -97,168 +105,228 @@ export default function OrderCreatePage() {
     return (
       <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen">
         <Header title="발주하기" showBack />
-        <div className="flex items-center justify-center py-20 text-sm text-gray-400">
-          시공사 정보를 찾을 수 없습니다
+        <div className="flex flex-col items-center justify-center py-24 animate-fade-in-up">
+          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+            <Building2 size={28} strokeWidth={1.3} className="text-gray-300" />
+          </div>
+          <p className="text-[15px] font-semibold text-gray-600">시공사 정보를 찾을 수 없습니다</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen">
+    <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen pb-8">
       <Header title="발주하기" showBack />
 
-      <div className="px-4 py-4 space-y-4">
-        {/* Partner Info */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center gap-3">
-          <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden shrink-0">
+      <div className="px-5 py-5 space-y-4 animate-fade-in-up">
+        {/* Partner Info Card */}
+        <div className="bg-blue-50/70 border border-blue-100/60 rounded-2xl p-4 flex items-center gap-3.5">
+          <div className="w-14 h-14 rounded-xl bg-white shadow-sm overflow-hidden shrink-0">
             <img
               src={partner.thumbnail}
               alt={partner.name}
               className="w-full h-full object-cover"
             />
           </div>
-          <div>
-            <p className="text-sm font-bold text-gray-900">{partner.name}</p>
-            <p className="text-xs text-gray-500 mt-0.5">{partner.description}</p>
+          <div className="min-w-0">
+            <p className="text-[16px] font-bold text-gray-900 mb-0.5">{partner.name}</p>
+            <p className="text-[13px] text-blue-600/70 truncate">{partner.description}</p>
           </div>
         </div>
 
-        {/* Site Name */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-          <label className="block text-xs font-bold text-gray-700 mb-2">현장명</label>
-          <input
-            type="text"
-            value={siteName}
-            onChange={(e) => setSiteName(e.target.value)}
-            placeholder="현장명을 입력하세요"
-            className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
-          />
+        {/* Site Info Section */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5">
+          <div className="flex items-center gap-2 mb-5">
+            <div className="w-6 h-6 rounded-md bg-blue-50 flex items-center justify-center">
+              <MapPin size={13} className="text-blue-600" />
+            </div>
+            <h3 className="text-[15px] font-bold text-gray-900">현장 정보</h3>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-[12px] font-medium text-gray-500 mb-1.5 ml-1">현장명</label>
+              <input
+                type="text"
+                value={siteName}
+                onChange={(e) => setSiteName(e.target.value)}
+                placeholder="현장명을 입력하세요"
+                className={inputClass(attempted && !siteName.trim())}
+              />
+              {attempted && !siteName.trim() && (
+                <p className="text-[11px] text-red-400 mt-1.5 ml-1">현장명을 입력해주세요</p>
+              )}
+            </div>
+            <div>
+              <label className="block text-[12px] font-medium text-gray-500 mb-1.5 ml-1">현장주소</label>
+              <input
+                type="text"
+                value={siteAddress}
+                onChange={(e) => setSiteAddress(e.target.value)}
+                placeholder="현장 주소를 입력하세요"
+                className={inputClass(attempted && !siteAddress.trim())}
+              />
+              {attempted && !siteAddress.trim() && (
+                <p className="text-[11px] text-red-400 mt-1.5 ml-1">현장주소를 입력해주세요</p>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* Site Address */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-          <label className="block text-xs font-bold text-gray-700 mb-2">현장주소</label>
-          <input
-            type="text"
-            value={siteAddress}
-            onChange={(e) => setSiteAddress(e.target.value)}
-            placeholder="현장 주소를 입력하세요"
-            className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
-          />
-        </div>
-
-        {/* Items */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-          <div className="flex items-center justify-between mb-3">
-            <label className="text-xs font-bold text-gray-700">시공 항목</label>
-            <button
-              onClick={addItem}
-              className="flex items-center gap-1 text-xs font-medium text-blue-600 active:text-blue-800"
-            >
-              <Plus size={14} />
-              항목 추가
-            </button>
+        {/* Items Section */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5">
+          <div className="flex items-center gap-2 mb-5">
+            <div className="w-6 h-6 rounded-md bg-blue-50 flex items-center justify-center">
+              <Layers size={13} className="text-blue-600" />
+            </div>
+            <h3 className="text-[15px] font-bold text-gray-900">시공 항목</h3>
           </div>
 
           <div className="space-y-3">
-            {items.map((item, idx) => (
-              <div key={idx} className="border border-gray-100 rounded-lg p-3 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-semibold text-gray-400">항목 {idx + 1}</span>
-                  {items.length > 1 && (
-                    <button
-                      onClick={() => removeItem(idx)}
-                      className="text-red-400 active:text-red-600"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  )}
-                </div>
-                <input
-                  type="text"
-                  value={item.name}
-                  onChange={(e) => updateItem(idx, 'name', e.target.value)}
-                  placeholder="항목명"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-blue-500 transition-colors"
-                />
-                <div className="grid grid-cols-3 gap-2">
-                  <div>
-                    <label className="block text-[10px] text-gray-500 mb-1">수량</label>
-                    <input
-                      type="number"
-                      min={1}
-                      value={item.quantity}
-                      onChange={(e) =>
-                        updateItem(idx, 'quantity', Math.max(1, parseInt(e.target.value) || 1))
-                      }
-                      className="w-full border border-gray-200 rounded-lg px-2 py-2 text-sm text-center text-gray-900 outline-none focus:border-blue-500 transition-colors"
-                    />
+            {items.map((item, idx) => {
+              const itemSubtotal = item.quantity * item.unitPrice;
+              const hasNameError = attempted && !item.name.trim();
+
+              return (
+                <div key={idx} className="bg-gray-50/80 rounded-xl p-4 relative">
+                  {/* Item Header */}
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-[11px] font-bold text-white">
+                        {idx + 1}
+                      </span>
+                      <span className="text-[12px] font-medium text-gray-400">항목 {idx + 1}</span>
+                    </div>
+                    {items.length > 1 && (
+                      <button
+                        onClick={() => removeItem(idx)}
+                        className="w-7 h-7 rounded-full bg-red-50 flex items-center justify-center active:bg-red-100 transition-colors"
+                      >
+                        <X size={14} className="text-red-400" />
+                      </button>
+                    )}
                   </div>
-                  <div>
-                    <label className="block text-[10px] text-gray-500 mb-1">단위</label>
-                    <input
-                      type="text"
-                      value={item.unit}
-                      onChange={(e) => updateItem(idx, 'unit', e.target.value)}
-                      placeholder="m2, 개"
-                      className="w-full border border-gray-200 rounded-lg px-2 py-2 text-sm text-center text-gray-900 placeholder-gray-400 outline-none focus:border-blue-500 transition-colors"
-                    />
+
+                  {/* Item Name - Full Width */}
+                  <input
+                    type="text"
+                    value={item.name}
+                    onChange={(e) => updateItem(idx, 'name', e.target.value)}
+                    placeholder="항목명을 입력하세요"
+                    className={`w-full bg-white border rounded-xl px-4 py-3 text-[14px] text-gray-900 placeholder-gray-300 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 mb-2.5 ${
+                      hasNameError ? 'border-red-300' : 'border-gray-100'
+                    }`}
+                  />
+
+                  {/* 3-col Grid */}
+                  <div className="grid grid-cols-3 gap-2">
+                    <div>
+                      <label className="block text-[11px] text-gray-400 mb-1 ml-0.5">수량</label>
+                      <input
+                        type="number"
+                        min={1}
+                        value={item.quantity}
+                        onChange={(e) =>
+                          updateItem(idx, 'quantity', Math.max(1, parseInt(e.target.value) || 1))
+                        }
+                        className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2.5 text-[14px] text-center text-gray-900 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] text-gray-400 mb-1 ml-0.5">단위</label>
+                      <input
+                        type="text"
+                        value={item.unit}
+                        onChange={(e) => updateItem(idx, 'unit', e.target.value)}
+                        placeholder="m2"
+                        className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2.5 text-[14px] text-center text-gray-900 placeholder-gray-300 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] text-gray-400 mb-1 ml-0.5">단가</label>
+                      <input
+                        type="number"
+                        min={0}
+                        value={item.unitPrice}
+                        onChange={(e) =>
+                          updateItem(idx, 'unitPrice', Math.max(0, parseInt(e.target.value) || 0))
+                        }
+                        className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2.5 text-[14px] text-right text-gray-900 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-[10px] text-gray-500 mb-1">단가</label>
-                    <input
-                      type="number"
-                      min={0}
-                      value={item.unitPrice}
-                      onChange={(e) =>
-                        updateItem(idx, 'unitPrice', Math.max(0, parseInt(e.target.value) || 0))
-                      }
-                      className="w-full border border-gray-200 rounded-lg px-2 py-2 text-sm text-right text-gray-900 outline-none focus:border-blue-500 transition-colors"
-                    />
+
+                  {/* Subtotal */}
+                  <div className="text-right mt-2.5">
+                    <span className="text-[13px] text-gray-400">소계 </span>
+                    <span className="text-[14px] font-bold text-gray-800">
+                      {itemSubtotal.toLocaleString()}원
+                    </span>
                   </div>
                 </div>
-                <div className="text-right text-xs text-gray-500">
-                  소계: <span className="font-medium text-gray-900">{(item.quantity * item.unitPrice).toLocaleString()}원</span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
+
+            {/* Add Item - Dashed Card */}
+            <button
+              onClick={addItem}
+              className="w-full border-2 border-dashed border-gray-200 rounded-xl py-4 flex items-center justify-center gap-2 text-[13px] font-semibold text-gray-400 transition-all duration-200 active:border-blue-300 active:text-blue-500 active:bg-blue-50/30 hover:border-gray-300"
+            >
+              <Plus size={18} />
+              항목 추가
+            </button>
           </div>
         </div>
 
-        {/* Memo */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-          <label className="block text-xs font-bold text-gray-700 mb-2">메모</label>
+        {/* Memo Section */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5">
+          <div className="flex items-center gap-2 mb-5">
+            <div className="w-6 h-6 rounded-md bg-blue-50 flex items-center justify-center">
+              <MessageSquare size={13} className="text-blue-600" />
+            </div>
+            <h3 className="text-[15px] font-bold text-gray-900">추가 메모</h3>
+          </div>
+
           <textarea
             value={memo}
             onChange={(e) => setMemo(e.target.value)}
-            placeholder="시공 관련 메모를 입력하세요"
+            placeholder="시공 관련 참고사항을 입력하세요"
             rows={3}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors resize-none"
+            className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-[14px] text-gray-900 placeholder-gray-300 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white resize-none"
           />
         </div>
 
-        {/* Total Price */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-bold text-gray-900">총 금액</span>
-            <span className="text-xl font-bold text-blue-600">
-              {totalPrice.toLocaleString()}원
-            </span>
-          </div>
+        {/* Total Price Card */}
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl px-5 py-5 shadow-lg shadow-blue-600/15">
+          <p className="text-[13px] text-blue-200 font-medium mb-1">총 견적금액</p>
+          <p className="text-[28px] font-bold text-white tracking-tight">
+            {totalPrice.toLocaleString()}
+            <span className="text-[16px] text-blue-200 font-semibold ml-1">원</span>
+          </p>
         </div>
 
         {/* Submit Button */}
         <button
           onClick={handleSubmit}
           disabled={!isValid || submitting}
-          className={`w-full py-3.5 rounded-xl text-sm font-bold transition-colors ${
+          className={`w-full h-14 rounded-2xl text-[16px] font-bold transition-all duration-200 flex items-center justify-center gap-2 ${
             isValid && !submitting
-              ? 'bg-blue-600 text-white active:bg-blue-700'
+              ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-600/25 active:shadow-sm active:translate-y-px'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed'
           }`}
         >
-          {submitting ? '발주 요청 중...' : '발주 요청하기'}
+          {submitting ? (
+            <>
+              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              발주 요청 중...
+            </>
+          ) : (
+            <>
+              발주 요청하기
+              <ArrowRight size={18} />
+            </>
+          )}
         </button>
       </div>
     </div>

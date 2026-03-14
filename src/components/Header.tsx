@@ -5,27 +5,31 @@ interface HeaderProps {
   title: string;
   showBack?: boolean;
   showNotification?: boolean;
+  transparent?: boolean;
 }
 
-export default function Header({ title, showBack = false, showNotification = false }: HeaderProps) {
+export default function Header({ title, showBack = false, showNotification = false, transparent = false }: HeaderProps) {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-gray-200">
-      <div className="flex items-center justify-between h-12 px-4">
-        <div className="w-8">
+    <header className={`sticky top-0 z-40 ${transparent ? 'glass' : 'bg-white/95 backdrop-blur-md'} border-b border-gray-100/80`}>
+      <div className="flex items-center justify-between h-[52px] px-4">
+        <div className="w-10 flex items-center">
           {showBack && (
-            <button onClick={() => navigate(-1)} className="text-gray-700">
-              <ChevronLeft size={24} />
+            <button
+              onClick={() => navigate(-1)}
+              className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors -ml-1"
+            >
+              <ChevronLeft size={22} className="text-gray-800" />
             </button>
           )}
         </div>
-        <h1 className="text-base font-semibold text-gray-900">{title}</h1>
-        <div className="w-8">
+        <h1 className="text-[15px] font-bold text-gray-900 tracking-tight">{title}</h1>
+        <div className="w-10 flex items-center justify-end">
           {showNotification && (
-            <button className="text-gray-700 relative">
-              <Bell size={20} />
-              <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+            <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors">
+              <Bell size={19} className="text-gray-700" />
+              <span className="absolute top-3.5 right-4 w-[7px] h-[7px] bg-red-500 rounded-full ring-2 ring-white animate-pulse-dot" />
             </button>
           )}
         </div>

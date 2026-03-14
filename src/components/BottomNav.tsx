@@ -13,20 +13,31 @@ export default function BottomNav() {
   const navigate = useNavigate();
 
   return (
-    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white border-t border-gray-200 z-50">
-      <div className="flex justify-around items-center h-14">
+    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white/95 backdrop-blur-md border-t border-gray-100 z-50">
+      <div className="flex justify-around items-center h-[56px]">
         {navItems.map(({ path, label, icon: Icon }) => {
           const isActive = location.pathname === path || location.pathname.startsWith(path + '/');
           return (
             <button
               key={path}
               onClick={() => navigate(path)}
-              className={`flex flex-col items-center gap-0.5 py-1 px-3 ${
-                isActive ? 'text-blue-600' : 'text-gray-400'
-              }`}
+              className="flex flex-col items-center gap-[3px] py-1.5 px-4 transition-all duration-200"
             >
-              <Icon size={20} strokeWidth={isActive ? 2.5 : 1.5} />
-              <span className="text-[10px] font-medium">{label}</span>
+              <div className={`relative transition-transform duration-200 ${isActive ? 'scale-110' : ''}`}>
+                <Icon
+                  size={21}
+                  strokeWidth={isActive ? 2.2 : 1.5}
+                  className={`transition-colors duration-200 ${isActive ? 'text-blue-600' : 'text-gray-400'}`}
+                />
+                {isActive && (
+                  <div className="absolute -bottom-[3px] left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-blue-600" />
+                )}
+              </div>
+              <span className={`text-[10px] tracking-tight transition-colors duration-200 ${
+                isActive ? 'font-bold text-blue-600' : 'font-medium text-gray-400'
+              }`}>
+                {label}
+              </span>
             </button>
           );
         })}
