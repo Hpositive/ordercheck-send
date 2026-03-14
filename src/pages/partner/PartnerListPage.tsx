@@ -57,11 +57,11 @@ export default function PartnerListPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50/80">
+    <div className="min-h-screen bg-[#f7f8fa]">
       <Header title={category?.name ?? '시공사 목록'} showBack />
 
       {/* Result Count + Sort Bar */}
-      <div className="bg-white px-5 py-3.5 border-b border-gray-100 flex items-center justify-between">
+      <div className="bg-white px-5 py-3.5 shadow-[0_1px_4px_rgba(0,0,0,0.04)] flex items-center justify-between">
         <span className="text-[13px] text-gray-500">
           총 <span className="font-bold text-gray-900">{partners.length}</span>개의 시공사
         </span>
@@ -154,7 +154,7 @@ function PartnerCard({ partner }: { partner: Partner }) {
   return (
     <Link
       to={`/mobile/partner/${partner.id}`}
-      className="block bg-white rounded-2xl p-4 card-interactive shadow-sm"
+      className="block bg-white rounded-2xl p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60 active:scale-[0.98] transition-transform"
     >
       <div className="flex gap-3.5">
         {/* Thumbnail */}
@@ -162,7 +162,7 @@ function PartnerCard({ partner }: { partner: Partner }) {
           <img
             src={partner.thumbnail}
             alt={partner.name}
-            className="w-[72px] h-[72px] rounded-xl object-cover bg-gray-100 shadow-sm"
+            className="w-[72px] h-[72px] rounded-xl object-cover bg-gray-100 shadow-[0_1px_6px_rgba(0,0,0,0.08)]"
           />
         </div>
 
@@ -184,13 +184,13 @@ function PartnerCard({ partner }: { partner: Partner }) {
                   size={12}
                   className={
                     i < Math.round(partner.rating)
-                      ? 'text-yellow-400 fill-yellow-400'
+                      ? 'text-amber-400 fill-amber-400'
                       : 'text-gray-200 fill-gray-200'
                   }
                 />
               ))}
             </div>
-            <span className="text-[13px] font-semibold text-gray-900">
+            <span className="text-[14px] font-bold text-gray-900">
               {partner.rating.toFixed(1)}
             </span>
             <span className="text-[12px] text-gray-400">
@@ -200,18 +200,18 @@ function PartnerCard({ partner }: { partner: Partner }) {
 
           {/* Stat Pills */}
           <div className="flex flex-wrap gap-1.5 mt-2">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 text-[11px] font-medium text-blue-600">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 text-[11px] font-medium text-blue-600">
               <ShoppingBag size={10} />
               주문 {partner.orderCount}건
             </span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-green-50 text-[11px] font-medium text-green-600">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-50 text-[11px] font-medium text-green-600">
               <MapPin size={10} />
               {partner.location}
             </span>
           </div>
 
           {/* Price */}
-          <p className="text-[14px] text-blue-600 font-bold mt-2">
+          <p className="text-[15px] text-blue-600 font-bold mt-2">
             {partner.priceRange}~
           </p>
         </div>

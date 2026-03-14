@@ -35,8 +35,13 @@ export default function LoginPage() {
   return (
     <div className="max-w-[480px] mx-auto w-full min-h-screen bg-white flex flex-col">
       {/* Gradient Top Section */}
-      <div className="relative bg-gradient-to-br from-blue-600 to-indigo-700 pt-20 pb-24 flex flex-col items-center justify-center overflow-hidden">
-        {/* Subtle SVG wave pattern */}
+      <div className="relative h-[280px] bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700 flex flex-col items-center justify-center overflow-hidden">
+        {/* Decorative circles */}
+        <div className="absolute -top-10 -right-10 w-44 h-44 rounded-full bg-white opacity-[0.06]" />
+        <div className="absolute top-20 -left-8 w-28 h-28 rounded-full bg-white opacity-[0.06]" />
+        <div className="absolute bottom-10 right-16 w-20 h-20 rounded-full bg-white opacity-[0.06]" />
+
+        {/* SVG wave at bottom */}
         <svg
           className="absolute bottom-0 left-0 w-full"
           viewBox="0 0 480 60"
@@ -55,22 +60,18 @@ export default function LoginPage() {
           />
         </svg>
 
-        {/* Decorative circles */}
-        <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/5" />
-        <div className="absolute top-16 -left-8 w-24 h-24 rounded-full bg-white/5" />
-
-        <h1 className="text-[32px] font-extrabold text-white tracking-tight relative z-10">
+        <h1 className="text-[28px] font-extrabold text-white tracking-tight relative z-10">
           준호체크
         </h1>
-        <p className="text-white/60 text-sm mt-2 relative z-10">
+        <p className="text-[14px] text-white/60 mt-2 relative z-10">
           인테리어 시공 발주의 새로운 기준
         </p>
       </div>
 
       {/* Form Card */}
-      <div className="flex-1 bg-white rounded-t-3xl -mt-10 relative z-20 shadow-[0_-4px_30px_rgba(0,0,0,0.08)] px-6 pt-8 pb-6 flex flex-col animate-fade-in-up">
-        <h2 className="text-xl font-bold text-gray-900">로그인</h2>
-        <p className="text-sm text-gray-400 mt-1 mb-6">계정 정보를 입력해 주세요</p>
+      <div className="flex-1 bg-white rounded-t-3xl -mt-8 relative z-20 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] p-7 flex flex-col animate-fade-in-up">
+        <h2 className="text-[22px] font-extrabold text-gray-900">로그인</h2>
+        <p className="text-[14px] text-gray-400 mt-1 mb-6">계정 정보를 입력해 주세요</p>
 
         {/* Email Input */}
         <div className="space-y-3">
@@ -84,7 +85,7 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="이메일 주소"
-              className="w-full pl-11 pr-4 h-12 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all"
+              className="w-full pl-11 pr-4 h-[52px] rounded-xl bg-gray-50 border border-gray-200 text-[14px] text-gray-900 placeholder-gray-400 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all"
             />
           </div>
 
@@ -99,7 +100,7 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="비밀번호"
-              className="w-full pl-11 pr-12 h-12 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all"
+              className="w-full pl-11 pr-12 h-[52px] rounded-xl bg-gray-50 border border-gray-200 text-[14px] text-gray-900 placeholder-gray-400 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all"
             />
             <button
               type="button"
@@ -113,7 +114,7 @@ export default function LoginPage() {
 
         {/* Forgot Password */}
         <div className="flex justify-end mt-2.5 mb-5">
-          <button className="text-xs text-blue-500 font-medium hover:text-blue-600 transition-colors">
+          <button className="text-[13px] text-blue-600 font-medium hover:text-blue-700 transition-colors">
             비밀번호를 잊으셨나요?
           </button>
         </div>
@@ -122,7 +123,7 @@ export default function LoginPage() {
         <button
           onClick={handleLogin}
           disabled={loading}
-          className="w-full h-[52px] rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[15px] font-bold shadow-md shadow-blue-600/25 active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 transition-all flex items-center justify-center gap-2"
+          className="w-full h-[52px] rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[15px] font-bold shadow-[0_4px_12px_rgba(37,99,235,0.3)] active:scale-[0.98] disabled:opacity-60 disabled:active:scale-100 transition-all flex items-center justify-center gap-2"
         >
           {loading ? (
             <>
@@ -137,26 +138,26 @@ export default function LoginPage() {
         {/* Divider */}
         <div className="flex items-center gap-3 my-6">
           <div className="flex-1 h-px bg-gray-200" />
-          <span className="text-xs text-gray-400 font-medium">또는</span>
+          <span className="text-[13px] text-gray-400 font-medium">또는</span>
           <div className="flex-1 h-px bg-gray-200" />
         </div>
 
         {/* Social Login Circles */}
         <div className="flex items-center justify-center gap-5">
           {/* Kakao */}
-          <button className="w-12 h-12 rounded-full bg-[#FEE500] flex items-center justify-center active:scale-95 transition-transform shadow-sm">
-            <span className="text-[#191919] text-base font-extrabold leading-none">K</span>
+          <button className="w-[52px] h-[52px] rounded-full bg-[#FEE500] flex items-center justify-center active:scale-[0.98] transition-transform shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <span className="text-[#191919] text-[16px] font-extrabold leading-none">K</span>
           </button>
           {/* Naver */}
-          <button className="w-12 h-12 rounded-full bg-[#03C75A] flex items-center justify-center active:scale-95 transition-transform shadow-sm">
-            <span className="text-white text-base font-extrabold leading-none">N</span>
+          <button className="w-[52px] h-[52px] rounded-full bg-[#03C75A] flex items-center justify-center active:scale-[0.98] transition-transform shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            <span className="text-white text-[16px] font-extrabold leading-none">N</span>
           </button>
         </div>
 
         {/* Sign Up */}
         <div className="mt-auto pt-8 flex items-center justify-center gap-1.5">
-          <span className="text-sm text-gray-400">아직 회원이 아니신가요?</span>
-          <button className="text-sm text-blue-500 font-semibold hover:text-blue-600 transition-colors">
+          <span className="text-[14px] text-gray-400">아직 회원이 아니신가요?</span>
+          <button className="text-[14px] text-blue-600 font-semibold hover:text-blue-700 transition-colors">
             회원가입
           </button>
         </div>

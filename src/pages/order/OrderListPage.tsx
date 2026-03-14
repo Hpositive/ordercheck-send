@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Package, ChevronRight, MapPin, Clock, CheckCircle2, XCircle, Loader2, Search } from 'lucide-react';
+import {
+  Package, ChevronRight, MapPin, Clock, CheckCircle2, XCircle, Loader2, Search,
+  Hammer, Paintbrush, Layers, LayoutGrid, DoorOpen, Plug,
+  Wrench, PaintBucket, Armchair, Snowflake, Sparkles,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import Header from '../../components/Header';
 import { SkeletonList } from '../../components/Loading';
 import { fetchOrders } from '../../api';
@@ -14,7 +19,7 @@ const STATUS_LABELS: Record<OrderStatus, string> = {
   cancelled: '취소',
 };
 
-const STATUS_CONFIG: Record<OrderStatus, { bg: string; text: string; icon: typeof Clock }> = {
+const STATUS_CONFIG: Record<OrderStatus, { bg: string; text: string; icon: LucideIcon }> = {
   pending: { bg: 'bg-amber-50', text: 'text-amber-600', icon: Clock },
   confirmed: { bg: 'bg-blue-50', text: 'text-blue-600', icon: CheckCircle2 },
   in_progress: { bg: 'bg-emerald-50', text: 'text-emerald-600', icon: Loader2 },
@@ -22,15 +27,19 @@ const STATUS_CONFIG: Record<OrderStatus, { bg: string; text: string; icon: typeo
   cancelled: { bg: 'bg-red-50', text: 'text-red-500', icon: XCircle },
 };
 
-const CATEGORY_EMOJI: Record<string, string> = {
-  '도배': '🎨',
-  '타일': '🧱',
-  '바닥': '🪵',
-  '페인트': '🖌️',
-  '전기': '⚡',
-  '설비': '🔧',
-  '목공': '🪚',
-  '철거': '🏗️',
+/* ── Lucide icon map by Korean category name ── */
+const CATEGORY_ICON_MAP: Record<string, LucideIcon> = {
+  '철거': Hammer,
+  '도배': Paintbrush,
+  '바닥': Layers,
+  '타일': LayoutGrid,
+  '목공': DoorOpen,
+  '전기': Plug,
+  '설비': Wrench,
+  '페인트': PaintBucket,
+  '가구': Armchair,
+  '에어컨': Snowflake,
+  '청소': Sparkles,
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -78,11 +87,11 @@ export default function OrderListPage() {
     ? orders.filter((o) => o.status === FILTER_MAP[activeTab])
     : orders;
 
-  const getCategoryEmoji = (name: string) => {
-    for (const key of Object.keys(CATEGORY_EMOJI)) {
-      if (name.includes(key)) return CATEGORY_EMOJI[key];
+  const getCategoryIcon = (name: string): LucideIcon => {
+    for (const key of Object.keys(CATEGORY_ICON_MAP)) {
+      if (name.includes(key)) return CATEGORY_ICON_MAP[key];
     }
-    return '📦';
+    return Package;
   };
 
   const getCategoryColor = (name: string) => {
@@ -94,7 +103,7 @@ export default function OrderListPage() {
 
   if (loading) {
     return (
-      <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen">
+      <div className="max-w-[480px] mx-auto w-full bg-[#f7f8fa] min-h-screen">
         <Header title="주문내역" />
         <div className="flex gap-2 px-5 py-3 overflow-x-auto scrollbar-hide">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -107,11 +116,11 @@ export default function OrderListPage() {
   }
 
   return (
-    <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen">
+    <div className="max-w-[480px] mx-auto w-full bg-[#f7f8fa] min-h-screen">
       <Header title="주문내역" />
 
       {/* Filter Pill Bar */}
-      <div className="sticky top-[52px] z-30 bg-gray-50/95 backdrop-blur-sm">
+      <div className="sticky top-[52px] z-30 bg-[#f7f8fa]/95 backdrop-blur-sm">
         <div className="flex gap-2 px-5 py-3 overflow-x-auto scrollbar-hide">
           {(Object.keys(FILTER_MAP) as FilterTab[]).map((tab) => {
             const isActive = activeTab === tab;
@@ -125,7 +134,7 @@ export default function OrderListPage() {
                 onClick={() => setActiveTab(tab)}
                 className={`shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-semibold transition-all duration-200 ${
                   isActive
-                    ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/25'
+                    ? 'bg-blue-600 text-white shadow-md'
                     : 'bg-white text-gray-500 border border-gray-200 hover:border-gray-300 active:bg-gray-50'
                 }`}
               >
@@ -155,11 +164,11 @@ export default function OrderListPage() {
             <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-5">
               <Package size={36} strokeWidth={1.3} className="text-gray-300" />
             </div>
-            <p className="text-[17px] font-bold text-gray-800 mb-1.5">주문 내역이 없습니다</p>
+            <p className="text-[15px] font-semibold text-gray-800 mb-1.5">주문 내역이 없습니다</p>
             <p className="text-[13px] text-gray-400 mb-6">시공사를 찾아 첫 발주를 해보세요</p>
             <button
               onClick={() => navigate('/mobile/partners')}
-              className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white text-[14px] font-bold rounded-xl shadow-sm shadow-blue-600/25 active:bg-blue-700 transition-colors"
+              className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white text-[14px] font-bold rounded-2xl shadow-[0_4px_12px_rgba(37,99,235,0.3)] active:scale-[0.98] transition-transform"
             >
               <Search size={16} />
               시공사 찾기
@@ -170,17 +179,18 @@ export default function OrderListPage() {
             {filteredOrders.map((order) => {
               const statusConf = STATUS_CONFIG[order.status];
               const StatusIcon = statusConf.icon;
+              const CatIcon = getCategoryIcon(order.categoryName);
 
               return (
                 <button
                   key={order.id}
                   onClick={() => navigate(`/mobile/orders/${order.id}`)}
-                  className="card-interactive w-full bg-white rounded-2xl p-4 text-left transition-all duration-200"
+                  className="w-full bg-white rounded-2xl p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60 text-left active:scale-[0.98] transition-transform"
                 >
                   {/* Top Row: Category + Status */}
                   <div className="flex items-center justify-between mb-2.5">
                     <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full ${getCategoryColor(order.categoryName)}`}>
-                      <span className="text-xs">{getCategoryEmoji(order.categoryName)}</span>
+                      <CatIcon size={12} />
                       {order.categoryName}
                     </span>
                     <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full ${statusConf.bg} ${statusConf.text}`}>
@@ -195,20 +205,20 @@ export default function OrderListPage() {
                   {/* Site */}
                   <div className="flex items-center gap-1 mb-3">
                     <MapPin size={13} className="text-gray-300 shrink-0" />
-                    <p className="text-[13px] text-gray-400 truncate">{order.siteName}</p>
+                    <p className="text-[13px] text-gray-500 truncate">{order.siteName}</p>
                   </div>
 
                   {/* Divider */}
-                  <div className="border-t border-gray-100 mb-3" />
+                  <div className="h-px bg-gray-100 my-3" />
 
                   {/* Bottom: Price + Date */}
                   <div className="flex items-center justify-between">
-                    <span className="text-[16px] font-bold text-gray-900">
+                    <span className="text-[18px] font-extrabold text-gray-900">
                       {order.totalPrice.toLocaleString()}
                       <span className="text-[13px] font-semibold text-gray-500">원</span>
                     </span>
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[12px] text-gray-300">{order.createdAt}</span>
+                      <span className="text-[12px] text-gray-400">{order.createdAt}</span>
                       <ChevronRight size={16} className="text-gray-200" />
                     </div>
                   </div>

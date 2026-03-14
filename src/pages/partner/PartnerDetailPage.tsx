@@ -46,7 +46,7 @@ export default function PartnerDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#f7f8fa]">
         <Header title="시공사 상세" showBack />
         <Loading />
       </div>
@@ -55,7 +55,7 @@ export default function PartnerDetailPage() {
 
   if (!partner) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#f7f8fa]">
         <Header title="시공사 상세" showBack />
         <div className="flex flex-col items-center justify-center py-24 text-gray-400 animate-fade-in-up">
           <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
@@ -70,7 +70,7 @@ export default function PartnerDetailPage() {
   const descriptionLong = partner.description && partner.description.length > 80;
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
+    <div className="min-h-screen bg-[#f7f8fa] pb-24">
       <Header title={partner.name} showBack transparent />
 
       {/* Hero Image with Gradient Overlay */}
@@ -86,7 +86,7 @@ export default function PartnerDetailPage() {
             {partner.name}
           </h2>
           <div className="flex items-center gap-1.5 mt-1.5">
-            <Star size={16} className="text-yellow-400 fill-yellow-400" />
+            <Star size={16} className="text-amber-400 fill-amber-400" />
             <span className="text-[15px] font-bold text-white">
               {partner.rating.toFixed(1)}
             </span>
@@ -141,7 +141,7 @@ export default function PartnerDetailPage() {
       )}
 
       {/* Sticky Tab Navigation */}
-      <div className="sticky top-[52px] z-30 bg-white border-b border-gray-200 shadow-sm">
+      <div className="sticky top-[52px] z-30 bg-white border-b border-gray-200 shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
         <div className="relative flex">
           {tabs.map((tab, idx) => (
             <button
@@ -177,13 +177,13 @@ export default function PartnerDetailPage() {
         <div className="flex gap-2.5">
           <a
             href="tel:"
-            className="w-[52px] h-[52px] shrink-0 flex items-center justify-center rounded-2xl border border-gray-200 bg-white hover:bg-gray-50 active:bg-gray-100 transition-colors shadow-sm"
+            className="w-[48px] h-[48px] shrink-0 flex items-center justify-center rounded-full border border-gray-200 bg-white hover:bg-gray-50 active:bg-gray-100 transition-colors shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
           >
             <Phone size={20} className="text-gray-600" />
           </a>
           <Link
             to={`/mobile/order/create/${partner.id}`}
-            className="flex-1 flex items-center justify-center h-[52px] bg-gradient-to-r from-blue-600 to-blue-700 text-white text-[15px] font-bold rounded-2xl active:from-blue-700 active:to-blue-800 transition-all shadow-lg shadow-blue-600/30"
+            className="flex-1 flex items-center justify-center h-[52px] bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[15px] font-bold rounded-2xl active:scale-[0.98] transition-transform shadow-[0_4px_12px_rgba(37,99,235,0.3)]"
           >
             발주하기
           </Link>
@@ -206,7 +206,7 @@ function PriceTab({ partner }: { partner: Partner }) {
 
   return (
     <div className="px-4 py-4 animate-fade-in-up">
-      <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+      <div className="bg-white rounded-2xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60">
         <table className="w-full text-[13px]">
           <thead>
             <tr className="bg-blue-50">
@@ -248,16 +248,13 @@ function PortfolioTab({ partner }: { partner: Partner }) {
 
   return (
     <div className="px-4 py-4 animate-fade-in-up">
-      <div className="columns-2 gap-2.5 space-y-2.5">
-        {partner.portfolio.map((item, idx) => (
+      <div className="grid grid-cols-2 gap-2.5">
+        {partner.portfolio.map((item) => (
           <div
             key={item.id}
-            className="break-inside-avoid rounded-2xl overflow-hidden bg-white shadow-sm border border-gray-100 group"
+            className="rounded-xl overflow-hidden bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60 group"
           >
-            <div
-              className="relative bg-gray-100"
-              style={{ aspectRatio: idx % 3 === 0 ? '3/4' : idx % 3 === 1 ? '1/1' : '4/3' }}
-            >
+            <div className="relative bg-gray-100 aspect-[4/3]">
               <img
                 src={item.image}
                 alt={item.title}
@@ -305,7 +302,7 @@ function ReviewTab({ partner }: { partner: Partner }) {
   return (
     <div className="px-4 py-4 space-y-3 animate-fade-in-up">
       {/* Rating Summary Card */}
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+      <div className="bg-white rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60">
         <div className="flex gap-5">
           {/* Left: big number */}
           <div className="flex flex-col items-center justify-center shrink-0">
@@ -319,7 +316,7 @@ function ReviewTab({ partner }: { partner: Partner }) {
                   size={14}
                   className={
                     i < Math.round(partner.rating)
-                      ? 'text-yellow-400 fill-yellow-400'
+                      ? 'text-amber-400 fill-amber-400'
                       : 'text-gray-200 fill-gray-200'
                   }
                 />
@@ -337,10 +334,10 @@ function ReviewTab({ partner }: { partner: Partner }) {
               return (
                 <div key={starNum} className="flex items-center gap-2">
                   <span className="text-[11px] text-gray-500 w-4 text-right shrink-0">{starNum}</span>
-                  <Star size={10} className="text-yellow-400 fill-yellow-400 shrink-0" />
+                  <Star size={10} className="text-amber-400 fill-amber-400 shrink-0" />
                   <div className="flex-1 h-[6px] bg-gray-100 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-yellow-400 rounded-full transition-all duration-500"
+                      className="h-full bg-amber-400 rounded-full transition-all duration-500"
                       style={{ width: `${(count / maxCount) * 100}%` }}
                     />
                   </div>
@@ -356,13 +353,13 @@ function ReviewTab({ partner }: { partner: Partner }) {
       {partner.reviews.map((review, idx) => (
         <div
           key={review.id}
-          className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 animate-fade-in-up"
+          className="bg-white rounded-2xl p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60 animate-fade-in-up"
           style={{ animationDelay: `${idx * 60}ms` }}
         >
           <div className="flex items-center gap-3">
             {/* Avatar */}
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shrink-0">
-              <span className="text-[13px] font-bold text-white">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shrink-0">
+              <span className="text-[14px] font-bold text-white">
                 {review.author.charAt(0)}
               </span>
             </div>
@@ -378,7 +375,7 @@ function ReviewTab({ partner }: { partner: Partner }) {
                     size={11}
                     className={
                       i < review.rating
-                        ? 'text-yellow-400 fill-yellow-400'
+                        ? 'text-amber-400 fill-amber-400'
                         : 'text-gray-200 fill-gray-200'
                     }
                   />

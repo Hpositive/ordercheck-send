@@ -1,38 +1,44 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Search,
-  Star,
-  ChevronRight,
-  Bell,
-  ShoppingCart,
-  BarChart3,
-  Building2,
-  ClipboardList,
-  Quote,
-  MapPin,
+  Search, Star, ChevronRight, Bell, ShoppingCart, BarChart3,
+  Building2, ClipboardList, MapPin, Hammer, Paintbrush, LayoutGrid,
+  Plug, Wrench, PaintBucket, DoorOpen, Armchair, Snowflake, Sparkles,
+  Quote, Layers,
 } from 'lucide-react';
-import Loading from '../../components/Loading';
 import { fetchCategories, fetchPartners } from '../../api';
 import type { Category, Partner } from '../../types';
 
-/* ── pastel background colors per category index ── */
-const PASTEL_BG = [
-  'bg-red-50',
-  'bg-orange-50',
-  'bg-amber-50',
-  'bg-emerald-50',
-  'bg-teal-50',
-  'bg-sky-50',
-  'bg-indigo-50',
-  'bg-violet-50',
-  'bg-pink-50',
-  'bg-lime-50',
-  'bg-cyan-50',
-  'bg-fuchsia-50',
-];
+const CATEGORY_ICONS: Record<string, React.ReactNode> = {
+  demolition: <Hammer size={24} />,
+  wallpaper: <Paintbrush size={24} />,
+  flooring: <Layers size={24} />,
+  tile: <LayoutGrid size={24} />,
+  carpentry: <DoorOpen size={24} />,
+  electrical: <Plug size={24} />,
+  plumbing: <Wrench size={24} />,
+  painting: <PaintBucket size={24} />,
+  window: <DoorOpen size={24} />,
+  furniture: <Armchair size={24} />,
+  aircon: <Snowflake size={24} />,
+  cleaning: <Sparkles size={24} />,
+};
 
-/* ── mock reviews (aggregated from partners) ── */
+const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
+  demolition: { bg: 'bg-red-100', text: 'text-red-600' },
+  wallpaper: { bg: 'bg-orange-100', text: 'text-orange-600' },
+  flooring: { bg: 'bg-amber-100', text: 'text-amber-700' },
+  tile: { bg: 'bg-emerald-100', text: 'text-emerald-600' },
+  carpentry: { bg: 'bg-teal-100', text: 'text-teal-600' },
+  electrical: { bg: 'bg-yellow-100', text: 'text-yellow-600' },
+  plumbing: { bg: 'bg-sky-100', text: 'text-sky-600' },
+  painting: { bg: 'bg-violet-100', text: 'text-violet-600' },
+  window: { bg: 'bg-indigo-100', text: 'text-indigo-600' },
+  furniture: { bg: 'bg-pink-100', text: 'text-pink-600' },
+  aircon: { bg: 'bg-cyan-100', text: 'text-cyan-600' },
+  cleaning: { bg: 'bg-lime-100', text: 'text-lime-600' },
+};
+
 interface SimpleReview {
   id: string;
   author: string;
@@ -49,18 +55,10 @@ export default function MainPage() {
 
   useEffect(() => {
     async function load() {
-      try {
-        const [cats, partners] = await Promise.all([
-          fetchCategories(),
-          fetchPartners(),
-        ]);
-        setCategories(cats);
-        setAllPartners(partners);
-      } catch (e) {
-        console.error('Failed to load data', e);
-      } finally {
-        setLoading(false);
-      }
+      const [cats, partners] = await Promise.all([fetchCategories(), fetchPartners()]);
+      setCategories(cats);
+      setAllPartners(partners);
+      setLoading(false);
     }
     load();
   }, []);
@@ -73,241 +71,148 @@ export default function MainPage() {
   const recentReviews = useMemo<SimpleReview[]>(() => {
     const reviews: SimpleReview[] = [];
     allPartners.forEach((p) =>
-      p.reviews.forEach((r) =>
-        reviews.push({ ...r, partnerName: p.name }),
-      ),
+      p.reviews.forEach((r) => reviews.push({ ...r, partnerName: p.name })),
     );
     return reviews.slice(0, 8);
   }, [allPartners]);
 
-  /* ── Loading state ── */
   if (loading) {
     return (
-      <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen">
-        <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100/80">
-          <div className="flex items-center justify-between h-[56px] px-5">
-            <span className="text-[19px] font-extrabold gradient-text tracking-tight">
-              준호체크
-            </span>
-            <div className="w-9 h-9" />
-          </div>
-        </header>
-        <Loading />
+      <div className="max-w-[480px] mx-auto w-full bg-[#f7f8fa] min-h-screen">
+        <_Header />
+        <div className="px-5 pt-6 space-y-4">
+          {[1, 2, 3].map(i => <div key={i} className="skeleton h-28 rounded-2xl" />)}
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen pb-8">
-      {/* ═══════════ Custom Header ═══════════ */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100/60">
-        <div className="flex items-center justify-between h-[56px] px-5">
-          <span className="text-[19px] font-extrabold gradient-text tracking-tight select-none">
-            준호체크
-          </span>
-          <button className="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors">
-            <Bell size={20} className="text-gray-700" />
-            <span className="absolute top-1 right-1 w-[7px] h-[7px] bg-red-500 rounded-full ring-2 ring-white animate-pulse-dot" />
-          </button>
-        </div>
-      </header>
+    <div className="max-w-[480px] mx-auto w-full bg-[#f7f8fa] min-h-screen pb-10">
+      <_Header />
 
-      {/* ═══════════ Search Bar ═══════════ */}
-      <div className="px-5 pt-4 pb-1 animate-fade-in-up">
+      {/* Search */}
+      <div className="px-5 pt-4">
         <button
           onClick={() => navigate('/mobile/category')}
-          className="w-full flex items-center gap-2.5 bg-gray-100 rounded-2xl px-4 py-3 shadow-sm"
+          className="w-full flex items-center gap-3 bg-white rounded-2xl px-4 py-3.5 shadow-[0_1px_4px_rgba(0,0,0,0.06)] border border-gray-100"
         >
-          <Search size={18} className="text-gray-400 shrink-0" />
-          <span className="text-[14px] text-gray-400 font-normal">
-            시공사, 시공 종류 검색
-          </span>
+          <Search size={18} className="text-gray-300" />
+          <span className="text-[14px] text-gray-400">시공사, 시공 종류 검색</span>
         </button>
       </div>
 
-      {/* ═══════════ Banner ═══════════ */}
-      <div className="px-5 pt-4 animate-fade-in-up" style={{ animationDelay: '0.05s' }}>
-        <div className="relative rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-600 p-6 text-white shadow-lg overflow-hidden">
-          {/* Decorative SVG Pattern */}
-          <svg
-            className="absolute top-0 right-0 w-48 h-48 opacity-10"
-            viewBox="0 0 200 200"
-            fill="none"
-          >
-            <circle cx="160" cy="40" r="80" fill="white" />
-            <circle cx="140" cy="80" r="50" fill="white" />
-            <circle cx="180" cy="120" r="30" fill="white" />
-          </svg>
-          <svg
-            className="absolute bottom-0 left-0 w-32 h-32 opacity-[0.07]"
-            viewBox="0 0 200 200"
-            fill="none"
-          >
-            <circle cx="40" cy="160" r="70" fill="white" />
-            <circle cx="20" cy="140" r="40" fill="white" />
-          </svg>
-
-          <p className="relative text-xs font-medium text-white/80 mb-1.5 tracking-wide">
-            인테리어 발주 플랫폼
-          </p>
-          <h2 className="relative text-[18px] font-bold leading-[1.45]">
-            인테리어 시공,
-            <br />
-            준호체크로 간편하게
-          </h2>
-          <p className="relative text-[12px] mt-2 text-white/70 leading-relaxed">
-            검증된 시공사 &middot; 실시간 견적 &middot; 간편 발주
-          </p>
-          <button
-            onClick={() => navigate('/mobile/category')}
-            className="relative mt-4 inline-flex items-center gap-1 bg-white/20 hover:bg-white/30 active:bg-white/10 backdrop-blur-sm text-white text-[13px] font-semibold rounded-xl px-4 py-2 transition-colors"
-          >
-            둘러보기
-            <ChevronRight size={15} className="mt-px" />
-          </button>
+      {/* Banner */}
+      <div className="px-5 pt-4">
+        <div className="relative rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(37,99,235,0.2)]">
+          <div className="bg-gradient-to-br from-[#2563eb] via-[#4f46e5] to-[#7c3aed] p-6 pb-7">
+            <svg className="absolute top-0 right-0 w-56 h-56 opacity-[0.08]" viewBox="0 0 200 200" fill="none">
+              <circle cx="160" cy="30" r="90" fill="white" />
+              <circle cx="180" cy="100" r="50" fill="white" />
+            </svg>
+            <svg className="absolute -bottom-4 -left-4 w-36 h-36 opacity-[0.06]" viewBox="0 0 200 200" fill="none">
+              <circle cx="40" cy="160" r="80" fill="white" />
+            </svg>
+            <p className="relative text-[11px] font-semibold text-white/60 uppercase tracking-[0.1em] mb-2">
+              인테리어 발주 플랫폼
+            </p>
+            <h2 className="relative text-[20px] font-extrabold text-white leading-[1.4]">
+              인테리어 시공,<br />준호체크로 간편하게
+            </h2>
+            <p className="relative text-[12px] mt-2 text-white/50">
+              검증된 시공사 · 실시간 견적 · 간편 발주
+            </p>
+            <button
+              onClick={() => navigate('/mobile/category')}
+              className="relative mt-5 inline-flex items-center gap-1 bg-white text-[#4f46e5] text-[13px] font-bold rounded-xl px-5 py-2.5 shadow-md active:scale-95 transition-transform"
+            >
+              둘러보기 <ChevronRight size={15} />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* ═══════════ Quick Actions ═══════════ */}
-      <div className="px-5 pt-5 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-        <div className="bg-white rounded-2xl shadow-sm p-4">
-          <div className="grid grid-cols-4 gap-2">
+      {/* Quick Actions */}
+      <div className="px-5 pt-5">
+        <div className="bg-white rounded-2xl shadow-[0_1px_8px_rgba(0,0,0,0.05)] p-5">
+          <div className="grid grid-cols-4 gap-1">
             {[
-              {
-                icon: <ShoppingCart size={22} className="text-blue-600" />,
-                label: '발주하기',
-                to: '/mobile/category',
-              },
-              {
-                icon: <BarChart3 size={22} className="text-emerald-600" />,
-                label: '단가비교',
-                to: '/mobile/category',
-              },
-              {
-                icon: <Building2 size={22} className="text-violet-600" />,
-                label: '시공사찾기',
-                to: '/mobile/category',
-              },
-              {
-                icon: <ClipboardList size={22} className="text-orange-500" />,
-                label: '내주문',
-                to: '/mobile/orders',
-              },
-            ].map((action) => (
-              <button
-                key={action.label}
-                onClick={() => navigate(action.to)}
-                className="flex flex-col items-center gap-2 py-2 active:scale-95 transition-transform"
-              >
-                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-50">
-                  {action.icon}
+              { icon: <ShoppingCart size={20} />, label: '발주하기', to: '/mobile/category', color: 'text-blue-600 bg-blue-50' },
+              { icon: <BarChart3 size={20} />, label: '단가비교', to: '/mobile/category', color: 'text-emerald-600 bg-emerald-50' },
+              { icon: <Building2 size={20} />, label: '시공사찾기', to: '/mobile/category', color: 'text-violet-600 bg-violet-50' },
+              { icon: <ClipboardList size={20} />, label: '내주문', to: '/mobile/orders', color: 'text-orange-500 bg-orange-50' },
+            ].map((a) => (
+              <button key={a.label} onClick={() => navigate(a.to)} className="flex flex-col items-center gap-2 py-1 active:scale-95 transition-transform">
+                <div className={`w-12 h-12 flex items-center justify-center rounded-2xl ${a.color}`}>
+                  {a.icon}
                 </div>
-                <span className="text-[12px] font-medium text-gray-700">
-                  {action.label}
-                </span>
+                <span className="text-[11px] font-semibold text-gray-600">{a.label}</span>
               </button>
             ))}
           </div>
         </div>
       </div>
 
-      {/* ═══════════ Category Grid ═══════════ */}
-      <div className="px-5 pt-6 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
-        <div className="flex items-center justify-between mb-3.5">
-          <h3 className="text-[15px] font-bold text-gray-900">시공 카테고리</h3>
-          <button
-            onClick={() => navigate('/mobile/category')}
-            className="flex items-center text-[12px] text-gray-400 font-medium"
-          >
-            전체보기
-            <ChevronRight size={14} />
+      {/* Category Grid */}
+      <div className="px-5 pt-7">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-[16px] font-extrabold text-gray-900">시공 카테고리</h3>
+          <button onClick={() => navigate('/mobile/category')} className="flex items-center text-[12px] text-gray-400 font-medium">
+            전체보기 <ChevronRight size={14} />
           </button>
         </div>
-        <div className="grid grid-cols-4 gap-3 stagger-children">
-          {categories.slice(0, 8).map((cat, idx) => (
-            <button
-              key={cat.id}
-              onClick={() => navigate(`/mobile/category/${cat.id}`)}
-              className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
-            >
-              <div
-                className={`w-14 h-14 flex items-center justify-center rounded-2xl ${PASTEL_BG[idx % PASTEL_BG.length]}`}
-              >
-                <span className="text-[26px] leading-none">{cat.icon}</span>
-              </div>
-              <span className="text-[12px] font-medium text-gray-700">
-                {cat.name}
-              </span>
-            </button>
-          ))}
+        <div className="grid grid-cols-4 gap-x-2 gap-y-4">
+          {categories.slice(0, 8).map((cat) => {
+            const colors = CATEGORY_COLORS[cat.id] || { bg: 'bg-gray-100', text: 'text-gray-600' };
+            return (
+              <button key={cat.id} onClick={() => navigate(`/mobile/category/${cat.id}`)}
+                className="flex flex-col items-center gap-2 active:scale-95 transition-transform">
+                <div className={`w-14 h-14 flex items-center justify-center rounded-2xl ${colors.bg} ${colors.text}`}>
+                  {CATEGORY_ICONS[cat.id] || <LayoutGrid size={24} />}
+                </div>
+                <span className="text-[12px] font-semibold text-gray-700">{cat.name}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* ═══════════ Popular Partners (horizontal scroll) ═══════════ */}
-      <div className="pt-7 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-        <div className="flex items-center justify-between px-5 mb-3.5">
-          <h3 className="text-[15px] font-bold text-gray-900">인기 시공사</h3>
-          <button
-            onClick={() => navigate('/mobile/category')}
-            className="flex items-center text-[12px] text-gray-400 font-medium"
-          >
-            더보기
-            <ChevronRight size={14} />
+      {/* Popular Partners */}
+      <div className="pt-8">
+        <div className="flex items-center justify-between px-5 mb-4">
+          <h3 className="text-[16px] font-extrabold text-gray-900">인기 시공사</h3>
+          <button onClick={() => navigate('/mobile/category')} className="flex items-center text-[12px] text-gray-400 font-medium">
+            더보기 <ChevronRight size={14} />
           </button>
         </div>
-        <div className="flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
+        <div className="flex gap-3.5 overflow-x-auto px-5 pb-2 scrollbar-hide">
           {topPartners.map((partner) => {
             const cat = categories.find((c) => c.id === partner.categoryId);
             return (
-              <button
-                key={partner.id}
-                onClick={() => navigate(`/mobile/partner/${partner.id}`)}
-                className="shrink-0 w-[200px] bg-white rounded-2xl shadow-sm overflow-hidden text-left card-interactive"
-              >
-                {/* Image with gradient overlay */}
-                <div className="relative w-full aspect-[4/3] bg-gray-100">
-                  <img
-                    src={partner.thumbnail}
-                    alt={partner.name}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent" />
-                  {/* Price badge */}
-                  <span className="absolute top-2.5 right-2.5 text-[11px] font-bold text-white bg-black/40 backdrop-blur-sm rounded-lg px-2 py-0.5">
+              <button key={partner.id} onClick={() => navigate(`/mobile/partner/${partner.id}`)}
+                className="shrink-0 w-[180px] bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.06)] overflow-hidden text-left active:scale-[0.97] transition-transform">
+                <div className="relative w-full aspect-[4/3] bg-gray-200">
+                  <img src={partner.thumbnail} alt={partner.name} className="w-full h-full object-cover" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                  <span className="absolute top-2.5 right-2.5 text-[10px] font-bold text-white bg-black/50 backdrop-blur rounded-md px-2 py-0.5">
                     {partner.priceRange}
                   </span>
-                  {/* Name + location on overlay */}
-                  <div className="absolute bottom-2.5 left-3 right-3">
-                    <p className="text-[14px] font-bold text-white truncate drop-shadow-sm">
-                      {partner.name}
-                    </p>
+                  <div className="absolute bottom-2.5 left-3">
+                    <p className="text-[14px] font-bold text-white drop-shadow">{partner.name}</p>
                     <div className="flex items-center gap-1 mt-0.5">
-                      <MapPin size={11} className="text-white/80" />
-                      <span className="text-[11px] text-white/80">
-                        {partner.location}
-                      </span>
+                      <MapPin size={10} className="text-white/70" />
+                      <span className="text-[10px] text-white/70">{partner.location}</span>
                     </div>
                   </div>
                 </div>
-                {/* Info section */}
-                <div className="px-3 py-2.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="flex items-center gap-0.5">
-                      <Star
-                        size={13}
-                        className="text-amber-400 fill-amber-400"
-                      />
-                      <span className="text-[13px] font-bold text-gray-900">
-                        {partner.rating}
-                      </span>
-                    </div>
-                    <span className="text-[11px] text-gray-400">
-                      리뷰 {partner.reviewCount}
-                    </span>
+                <div className="px-3 py-2.5 flex items-center justify-between">
+                  <div className="flex items-center gap-1">
+                    <Star size={13} className="text-amber-400 fill-amber-400" />
+                    <span className="text-[13px] font-bold text-gray-900">{partner.rating}</span>
+                    <span className="text-[11px] text-gray-400 ml-0.5">({partner.reviewCount})</span>
                   </div>
                   {cat && (
-                    <span className="inline-block mt-1.5 text-[11px] font-medium text-blue-600 bg-blue-50 rounded-full px-2.5 py-0.5">
+                    <span className="text-[10px] font-semibold text-blue-600 bg-blue-50 rounded-full px-2 py-0.5">
                       {cat.name}
                     </span>
                   )}
@@ -318,43 +223,28 @@ export default function MainPage() {
         </div>
       </div>
 
-      {/* ═══════════ Recent Reviews (horizontal scroll) ═══════════ */}
-      <div className="pt-7 animate-fade-in-up" style={{ animationDelay: '0.25s' }}>
-        <div className="flex items-center justify-between px-5 mb-3.5">
-          <h3 className="text-[15px] font-bold text-gray-900">최근 시공 후기</h3>
+      {/* Recent Reviews */}
+      <div className="pt-8">
+        <div className="px-5 mb-4">
+          <h3 className="text-[16px] font-extrabold text-gray-900">최근 시공 후기</h3>
         </div>
         <div className="flex gap-3 overflow-x-auto px-5 pb-4 scrollbar-hide">
           {recentReviews.map((review, idx) => (
-            <div
-              key={`${review.id}-${idx}`}
-              className="shrink-0 w-[240px] bg-white rounded-2xl shadow-sm p-4 flex flex-col justify-between"
-            >
+            <div key={`${review.id}-${idx}`}
+              className="shrink-0 w-[220px] bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] p-4 flex flex-col justify-between border border-gray-50">
               <div>
-                <Quote size={18} className="text-blue-200 mb-2" />
-                <p className="text-[13px] text-gray-700 leading-relaxed line-clamp-3">
-                  {review.content}
-                </p>
+                <Quote size={16} className="text-blue-300 mb-2" />
+                <p className="text-[13px] text-gray-600 leading-[1.6] line-clamp-3">{review.content}</p>
               </div>
               <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
                 <div>
-                  <p className="text-[12px] font-semibold text-gray-800">
-                    {review.author}
-                  </p>
-                  <p className="text-[11px] text-gray-400 mt-0.5">
-                    {review.partnerName}
-                  </p>
+                  <p className="text-[12px] font-bold text-gray-800">{review.author}</p>
+                  <p className="text-[10px] text-gray-400">{review.partnerName}</p>
                 </div>
-                <div className="flex items-center gap-0.5">
+                <div className="flex gap-0.5">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      size={11}
-                      className={
-                        i < Math.round(review.rating)
-                          ? 'text-amber-400 fill-amber-400'
-                          : 'text-gray-200'
-                      }
-                    />
+                    <Star key={i} size={10}
+                      className={i < Math.round(review.rating) ? 'text-amber-400 fill-amber-400' : 'text-gray-200'} />
                   ))}
                 </div>
               </div>
@@ -363,5 +253,19 @@ export default function MainPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function _Header() {
+  return (
+    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-gray-100/50">
+      <div className="flex items-center justify-between h-[56px] px-5">
+        <span className="text-[20px] font-extrabold gradient-text tracking-tight select-none">준호체크</span>
+        <button className="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-50 active:bg-gray-100 transition-colors">
+          <Bell size={21} className="text-gray-600" />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white" />
+        </button>
+      </div>
+    </header>
   );
 }

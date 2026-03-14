@@ -41,7 +41,7 @@ export default function OrderDetailPage() {
 
   if (loading) {
     return (
-      <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen">
+      <div className="max-w-[480px] mx-auto w-full bg-[#f7f8fa] min-h-screen">
         <Header title="주문 상세" showBack />
         <Loading />
       </div>
@@ -50,7 +50,7 @@ export default function OrderDetailPage() {
 
   if (!order) {
     return (
-      <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen">
+      <div className="max-w-[480px] mx-auto w-full bg-[#f7f8fa] min-h-screen">
         <Header title="주문 상세" showBack />
         <div className="flex flex-col items-center justify-center py-24 animate-fade-in-up">
           <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
@@ -67,12 +67,12 @@ export default function OrderDetailPage() {
   const isPending = order.status === 'pending';
 
   return (
-    <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen pb-8">
+    <div className="max-w-[480px] mx-auto w-full bg-[#f7f8fa] min-h-screen pb-8">
       <Header title="주문 상세" showBack />
 
       <div className="px-5 py-5 space-y-4 animate-fade-in-up">
         {/* Status Progress Card */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60 overflow-hidden">
           {isCancelled ? (
             /* Cancelled Alert */
             <div className="bg-red-50 border border-red-100 rounded-2xl p-5">
@@ -91,11 +91,11 @@ export default function OrderDetailPage() {
             <div className="p-5 pb-6">
               <div className="flex items-start justify-between relative">
                 {/* Connecting Line Background */}
-                <div className="absolute top-4 left-[calc(12.5%)] right-[calc(12.5%)] h-[3px] bg-gray-100 rounded-full" />
+                <div className="absolute top-[18px] left-[calc(12.5%)] right-[calc(12.5%)] h-[3px] bg-gray-200 rounded-full" />
                 {/* Active Line */}
                 {currentStep > 0 && (
                   <div
-                    className="absolute top-4 left-[calc(12.5%)] h-[3px] bg-blue-600 rounded-full transition-all duration-500"
+                    className="absolute top-[18px] left-[calc(12.5%)] h-[3px] bg-blue-600 rounded-full transition-all duration-500"
                     style={{
                       width: `${(currentStep / (PROGRESS_STEPS.length - 1)) * 75}%`,
                     }}
@@ -112,21 +112,21 @@ export default function OrderDetailPage() {
                       {/* Circle */}
                       <div className="relative">
                         {isPassed && (
-                          <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shadow-sm shadow-blue-600/20">
+                          <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center shadow-sm shadow-blue-600/20">
                             <Check size={16} className="text-white" strokeWidth={3} />
                           </div>
                         )}
                         {isCurrent && (
                           <div className="relative">
-                            <div className="absolute inset-0 w-8 h-8 rounded-full bg-blue-600/20 animate-ping" />
-                            <div className="relative w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shadow-md shadow-blue-600/30">
+                            <div className="absolute inset-0 w-9 h-9 rounded-full bg-blue-600/20 animate-ping" />
+                            <div className="relative w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center shadow-md shadow-blue-600/30">
                               <div className="w-2.5 h-2.5 rounded-full bg-white" />
                             </div>
                           </div>
                         )}
                         {isFuture && (
-                          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-                            <span className="text-[12px] font-bold text-gray-300">{idx + 1}</span>
+                          <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center">
+                            <span className="text-[12px] font-bold text-gray-400">{idx + 1}</span>
                           </div>
                         )}
                       </div>
@@ -148,9 +148,9 @@ export default function OrderDetailPage() {
         </div>
 
         {/* Order Info Card */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100/80">
+        <div className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60">
           <div className="px-5 pt-5 pb-1">
-            <h3 className="text-[15px] font-bold text-gray-900 mb-4">주문 정보</h3>
+            <h3 className="text-[16px] font-extrabold text-gray-900 mb-4">주문 정보</h3>
           </div>
 
           <div className="divide-y divide-gray-50">
@@ -161,12 +161,12 @@ export default function OrderDetailPage() {
               { icon: Tag, label: '시공 분류', value: order.categoryName },
             ].map((row, i) => (
               <div key={i} className="flex items-center gap-3.5 px-5 py-3.5">
-                <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
                   <row.icon size={15} className="text-gray-400" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[11px] text-gray-400 font-medium mb-0.5">{row.label}</p>
-                  <p className="text-[14px] font-medium text-gray-900 truncate">{row.value}</p>
+                  <p className="text-[11px] text-gray-500 font-medium mb-0.5">{row.label}</p>
+                  <p className="text-[14px] font-semibold text-gray-900 truncate">{row.value}</p>
                 </div>
                 <ChevronRight size={14} className="text-gray-200 shrink-0" />
               </div>
@@ -175,17 +175,17 @@ export default function OrderDetailPage() {
         </div>
 
         {/* Items Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100/80">
+        <div className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60">
           <div className="px-5 pt-5">
-            <h3 className="text-[15px] font-bold text-gray-900 mb-4">시공 항목</h3>
+            <h3 className="text-[16px] font-extrabold text-gray-900 mb-4">시공 항목</h3>
           </div>
 
           <div className="px-5 space-y-2.5 pb-4">
             {order.items.map((item, idx) => (
-              <div key={idx} className="bg-gray-50/80 rounded-xl p-3.5">
+              <div key={idx} className="bg-white rounded-xl border border-gray-100 p-3.5 shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
                 <div className="flex items-start justify-between mb-1.5">
                   <p className="text-[14px] font-semibold text-gray-900">{item.name}</p>
-                  <p className="text-[14px] font-bold text-gray-900">
+                  <p className="text-[14px] font-bold text-gray-900 text-right">
                     {(item.quantity * item.unitPrice).toLocaleString()}
                     <span className="text-[12px] text-gray-400 font-medium">원</span>
                   </p>
@@ -199,9 +199,9 @@ export default function OrderDetailPage() {
 
           {/* Total Card */}
           <div className="mx-5 mb-5">
-            <div className="bg-blue-600 rounded-xl px-5 py-4 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl px-5 py-4 flex items-center justify-between">
               <span className="text-[14px] font-semibold text-blue-100">합계</span>
-              <span className="text-[20px] font-bold text-white tracking-tight">
+              <span className="text-[22px] font-extrabold text-white tracking-tight">
                 {order.totalPrice.toLocaleString()}
                 <span className="text-[14px] text-blue-200 font-semibold ml-0.5">원</span>
               </span>
@@ -211,12 +211,12 @@ export default function OrderDetailPage() {
 
         {/* Memo - Quote Style */}
         {order.memo && (
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5">
+          <div className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60 p-5">
             <div className="flex items-center gap-2 mb-3">
               <FileText size={15} className="text-gray-400" />
-              <h3 className="text-[15px] font-bold text-gray-900">메모</h3>
+              <h3 className="text-[16px] font-extrabold text-gray-900">메모</h3>
             </div>
-            <div className="border-l-[3px] border-blue-400 pl-4 py-1">
+            <div className="border-l-4 border-blue-400 bg-blue-50/50 rounded-r-xl pl-4 py-3 pr-3">
               <p className="text-[14px] text-gray-600 leading-relaxed whitespace-pre-wrap">
                 {order.memo}
               </p>
@@ -225,19 +225,19 @@ export default function OrderDetailPage() {
         )}
 
         {/* Date Info */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5">
+        <div className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60 p-5">
           <div className="flex items-center gap-2 mb-4">
             <Calendar size={15} className="text-gray-400" />
-            <h3 className="text-[15px] font-bold text-gray-900">일정 정보</h3>
+            <h3 className="text-[16px] font-extrabold text-gray-900">일정 정보</h3>
           </div>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-[13px] text-gray-400">주문일</span>
-              <span className="text-[14px] text-gray-900 font-medium">{order.createdAt}</span>
+              <span className="text-[13px] text-gray-500">주문일</span>
+              <span className="text-[14px] text-gray-900 font-semibold">{order.createdAt}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-[13px] text-gray-400">최종수정일</span>
-              <span className="text-[14px] text-gray-900 font-medium">{order.updatedAt}</span>
+              <span className="text-[13px] text-gray-500">최종수정일</span>
+              <span className="text-[14px] text-gray-900 font-semibold">{order.updatedAt}</span>
             </div>
           </div>
         </div>
@@ -246,7 +246,7 @@ export default function OrderDetailPage() {
         {isPending && (
           <div className="pt-2">
             <button
-              className="w-full py-3.5 rounded-2xl border-2 border-red-200 text-red-500 text-[15px] font-bold transition-all duration-200 active:bg-red-50 active:border-red-300"
+              className="w-full py-3.5 rounded-2xl border-2 border-red-200 text-red-500 text-[15px] font-bold transition-all duration-200 active:bg-red-50 active:border-red-300 active:scale-[0.98] transition-transform"
             >
               주문 취소
             </button>

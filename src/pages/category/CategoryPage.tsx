@@ -1,26 +1,45 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, ChevronRight, SearchX, X } from 'lucide-react';
+import {
+  Search, ChevronRight, SearchX, X,
+  Hammer, Paintbrush, Layers, LayoutGrid, DoorOpen, Plug,
+  Wrench, PaintBucket, Armchair, Snowflake, Sparkles,
+} from 'lucide-react';
 import Header from '../../components/Header';
 import Loading from '../../components/Loading';
 import { fetchCategories } from '../../api';
 import type { Category } from '../../types';
 
-/* ── pastel styles per category index ── */
-const PASTEL_STYLES: { bg: string; ring: string }[] = [
-  { bg: 'bg-red-50', ring: 'ring-red-100' },
-  { bg: 'bg-orange-50', ring: 'ring-orange-100' },
-  { bg: 'bg-amber-50', ring: 'ring-amber-100' },
-  { bg: 'bg-emerald-50', ring: 'ring-emerald-100' },
-  { bg: 'bg-teal-50', ring: 'ring-teal-100' },
-  { bg: 'bg-sky-50', ring: 'ring-sky-100' },
-  { bg: 'bg-indigo-50', ring: 'ring-indigo-100' },
-  { bg: 'bg-violet-50', ring: 'ring-violet-100' },
-  { bg: 'bg-pink-50', ring: 'ring-pink-100' },
-  { bg: 'bg-lime-50', ring: 'ring-lime-100' },
-  { bg: 'bg-cyan-50', ring: 'ring-cyan-100' },
-  { bg: 'bg-fuchsia-50', ring: 'ring-fuchsia-100' },
-];
+/* ── Icon & color maps (same as MainPage) ── */
+const CATEGORY_ICONS: Record<string, React.ReactNode> = {
+  demolition: <Hammer size={24} />,
+  wallpaper: <Paintbrush size={24} />,
+  flooring: <Layers size={24} />,
+  tile: <LayoutGrid size={24} />,
+  carpentry: <DoorOpen size={24} />,
+  electrical: <Plug size={24} />,
+  plumbing: <Wrench size={24} />,
+  painting: <PaintBucket size={24} />,
+  window: <DoorOpen size={24} />,
+  furniture: <Armchair size={24} />,
+  aircon: <Snowflake size={24} />,
+  cleaning: <Sparkles size={24} />,
+};
+
+const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
+  demolition: { bg: 'bg-red-100', text: 'text-red-600' },
+  wallpaper: { bg: 'bg-orange-100', text: 'text-orange-600' },
+  flooring: { bg: 'bg-amber-100', text: 'text-amber-700' },
+  tile: { bg: 'bg-emerald-100', text: 'text-emerald-600' },
+  carpentry: { bg: 'bg-teal-100', text: 'text-teal-600' },
+  electrical: { bg: 'bg-yellow-100', text: 'text-yellow-600' },
+  plumbing: { bg: 'bg-sky-100', text: 'text-sky-600' },
+  painting: { bg: 'bg-violet-100', text: 'text-violet-600' },
+  window: { bg: 'bg-indigo-100', text: 'text-indigo-600' },
+  furniture: { bg: 'bg-pink-100', text: 'text-pink-600' },
+  aircon: { bg: 'bg-cyan-100', text: 'text-cyan-600' },
+  cleaning: { bg: 'bg-lime-100', text: 'text-lime-600' },
+};
 
 const POPULAR_TAGS = ['철거', '도배', '바닥', '타일'];
 
@@ -52,7 +71,7 @@ export default function CategoryPage() {
   /* ── Loading state ── */
   if (loading) {
     return (
-      <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen">
+      <div className="max-w-[480px] mx-auto w-full bg-[#f7f8fa] min-h-screen">
         <Header title="시공 찾기" showBack />
         <Loading />
       </div>
@@ -60,12 +79,12 @@ export default function CategoryPage() {
   }
 
   return (
-    <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen pb-8">
+    <div className="max-w-[480px] mx-auto w-full bg-[#f7f8fa] min-h-screen pb-8">
       <Header title="시공 찾기" showBack />
 
       {/* ═══════════ Search Bar ═══════════ */}
       <div className="px-5 pt-4 pb-1 animate-fade-in-up">
-        <div className="relative flex items-center gap-2.5 bg-gray-100 rounded-2xl px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-blue-200 transition-shadow">
+        <div className="relative flex items-center gap-2.5 bg-white rounded-2xl px-4 py-3 shadow-[0_1px_4px_rgba(0,0,0,0.06)] border border-gray-100 focus-within:ring-2 focus-within:ring-blue-200 transition-shadow">
           <Search size={18} className="text-gray-400 shrink-0" />
           <input
             type="text"
@@ -97,7 +116,7 @@ export default function CategoryPage() {
               onClick={() => setSearch(tag)}
               className={`shrink-0 text-[13px] font-medium rounded-full px-4 py-1.5 transition-colors ${
                 search === tag
-                  ? 'bg-blue-600 text-white shadow-sm'
+                  ? 'bg-blue-600 text-white shadow-md'
                   : 'bg-white text-gray-600 border border-gray-200 active:bg-gray-50'
               }`}
             >
@@ -108,20 +127,20 @@ export default function CategoryPage() {
       </div>
 
       {/* ═══════════ Category List ═══════════ */}
-      <div className="px-5 pt-4 flex flex-col gap-2.5 stagger-children">
-        {filtered.map((cat, idx) => {
-          const pastel = PASTEL_STYLES[idx % PASTEL_STYLES.length];
+      <div className="px-5 pt-4 flex flex-col gap-3 stagger-children">
+        {filtered.map((cat) => {
+          const colors = CATEGORY_COLORS[cat.id] || { bg: 'bg-gray-100', text: 'text-gray-600' };
           return (
             <button
               key={cat.id}
               onClick={() => navigate(`/mobile/category/${cat.id}`)}
-              className="card-interactive flex items-center gap-4 bg-white rounded-2xl p-4 shadow-sm text-left"
+              className="flex items-center gap-4 bg-white rounded-2xl p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60 text-left active:scale-[0.98] transition-transform"
             >
               {/* Icon circle */}
               <div
-                className={`w-14 h-14 flex items-center justify-center rounded-2xl shrink-0 ring-1 ${pastel.bg} ${pastel.ring}`}
+                className={`w-12 h-12 flex items-center justify-center rounded-xl shrink-0 ${colors.bg} ${colors.text}`}
               >
-                <span className="text-[28px] leading-none">{cat.icon}</span>
+                {CATEGORY_ICONS[cat.id] || <LayoutGrid size={24} />}
               </div>
 
               {/* Text content */}
@@ -129,7 +148,7 @@ export default function CategoryPage() {
                 <p className="text-[15px] font-bold text-gray-900">
                   {cat.name}
                 </p>
-                <p className="text-[12px] text-gray-500 mt-0.5 leading-relaxed">
+                <p className="text-[13px] text-gray-500 mt-0.5 leading-relaxed">
                   {cat.description}
                 </p>
                 <span className="inline-block mt-2 text-[11px] font-semibold text-blue-600 bg-blue-50 rounded-full px-2.5 py-0.5">

@@ -10,7 +10,6 @@ import {
   FileText,
   ChevronRight,
   LogOut,
-  Edit3,
 } from 'lucide-react';
 import Header from '../../components/Header';
 import Loading from '../../components/Loading';
@@ -32,23 +31,23 @@ const menuGroups: MenuGroup[] = [
   {
     title: '주문 / 시공',
     items: [
-      { icon: ClipboardList, label: '주문 관리', link: '/mobile/orders', color: 'text-blue-600', bg: 'bg-blue-50' },
-      { icon: MapPin, label: '현장 관리', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+      { icon: ClipboardList, label: '주문 관리', link: '/mobile/orders', color: 'text-blue-600', bg: 'bg-blue-100' },
+      { icon: MapPin, label: '현장 관리', color: 'text-emerald-600', bg: 'bg-emerald-100' },
     ],
   },
   {
     title: '결제',
     items: [
-      { icon: CreditCard, label: '결제 수단 관리', color: 'text-violet-600', bg: 'bg-violet-50' },
+      { icon: CreditCard, label: '결제 수단 관리', color: 'text-violet-600', bg: 'bg-violet-100' },
     ],
   },
   {
     title: '설정',
     items: [
-      { icon: BellRing, label: '알림 설정', color: 'text-orange-500', bg: 'bg-orange-50' },
-      { icon: Megaphone, label: '공지사항', color: 'text-pink-500', bg: 'bg-pink-50' },
-      { icon: Headphones, label: '고객센터', color: 'text-cyan-600', bg: 'bg-cyan-50' },
-      { icon: FileText, label: '이용약관', color: 'text-gray-500', bg: 'bg-gray-100' },
+      { icon: BellRing, label: '알림 설정', color: 'text-amber-600', bg: 'bg-amber-100' },
+      { icon: Megaphone, label: '공지사항', color: 'text-pink-600', bg: 'bg-pink-100' },
+      { icon: Headphones, label: '고객센터', color: 'text-cyan-600', bg: 'bg-cyan-100' },
+      { icon: FileText, label: '이용약관', color: 'text-gray-600', bg: 'bg-gray-100' },
     ],
   },
 ];
@@ -74,7 +73,7 @@ export default function MyPage() {
 
   if (loading) {
     return (
-      <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen">
+      <div className="max-w-[480px] mx-auto w-full bg-[#f7f8fa] min-h-screen">
         <Header title="마이페이지" />
         <Loading />
       </div>
@@ -90,37 +89,34 @@ export default function MyPage() {
   };
 
   return (
-    <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen animate-fade-in-up">
+    <div className="max-w-[480px] mx-auto w-full bg-[#f7f8fa] min-h-screen animate-fade-in-up">
       <Header title="마이페이지" />
 
       {/* Gradient Banner + Profile */}
       <div className="relative">
-        <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-600" />
+        <div className="h-36 bg-gradient-to-br from-blue-600 to-indigo-700 relative overflow-hidden">
+          {/* Subtle radial pattern */}
+          <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-white/[0.06] -translate-y-1/4 translate-x-1/4" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full bg-white/[0.04] translate-y-1/3 -translate-x-1/4" />
+        </div>
 
-        <div className="relative px-5 -mt-10 pb-5">
+        <div className="flex flex-col items-center -mt-10 relative z-10">
           {/* Avatar */}
-          <div className="w-[72px] h-[72px] rounded-full border-[3px] border-white bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
-            <span className="text-2xl font-bold text-white">{initials}</span>
+          <div className="w-[76px] h-[76px] rounded-full ring-4 ring-white bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
+            <span className="text-[26px] font-bold text-white">{initials}</span>
           </div>
 
           {/* User Info */}
-          <div className="mt-3 flex items-start justify-between">
-            <div className="min-w-0">
-              <h2 className="text-xl font-bold text-gray-900">{user?.name}</h2>
-              <p className="text-sm text-gray-500 mt-0.5">{user?.company}</p>
-              <p className="text-xs text-gray-400 mt-0.5">{user?.email}</p>
-            </div>
-            <button className="mt-1 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-xs font-medium text-gray-600 active:bg-gray-50 transition-colors shadow-sm">
-              <Edit3 size={12} />
-              프로필 수정
-            </button>
+          <div className="mt-3 text-center px-5">
+            <h2 className="text-[20px] font-extrabold text-gray-900">{user?.name}</h2>
+            <p className="text-[14px] text-gray-500 mt-0.5">{user?.company}</p>
           </div>
         </div>
       </div>
 
       {/* Stats Row */}
-      <div className="px-4 -mt-1">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100/60 px-2 py-4">
+      <div className="mx-5 -mt-2 relative z-10">
+        <div className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60 px-2 py-4 mt-4">
           <div className="grid grid-cols-3 divide-x divide-gray-100">
             {[
               { label: '주문', value: 3 },
@@ -128,8 +124,8 @@ export default function MyPage() {
               { label: '찜', value: 0 },
             ].map((stat) => (
               <div key={stat.label} className="flex flex-col items-center">
-                <span className="text-xl font-bold text-gray-900">{stat.value}</span>
-                <span className="text-xs text-gray-400 mt-1">{stat.label}</span>
+                <span className="text-[22px] font-extrabold text-gray-900">{stat.value}</span>
+                <span className="text-[12px] text-gray-500 mt-1">{stat.label}</span>
               </div>
             ))}
           </div>
@@ -137,25 +133,25 @@ export default function MyPage() {
       </div>
 
       {/* Menu Sections */}
-      <div className="px-4 mt-5 space-y-5">
+      <div className="mt-5 space-y-5">
         {menuGroups.map((group) => (
           <div key={group.title}>
-            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2 pl-1">
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-5 pt-5 pb-2">
               {group.title}
             </p>
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100/60 overflow-hidden">
+            <div className="bg-white rounded-2xl mx-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60 overflow-hidden">
               {group.items.map((item, idx) => {
                 const Icon = item.icon;
                 const isLast = idx === group.items.length - 1;
 
                 const row = (
                   <div
-                    className={`flex items-center justify-between px-4 py-3.5 active:bg-gray-50 transition-colors ${
+                    className={`flex items-center justify-between px-5 py-3.5 active:bg-gray-50 transition-colors ${
                       !isLast ? 'border-b border-gray-50' : ''
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-lg ${item.bg} flex items-center justify-center`}>
+                      <div className={`w-9 h-9 rounded-xl ${item.bg} flex items-center justify-center`}>
                         <Icon size={16} className={item.color} />
                       </div>
                       <span className="text-[14px] font-medium text-gray-800">{item.label}</span>
@@ -187,19 +183,19 @@ export default function MyPage() {
         ))}
       </div>
 
-      {/* App Version */}
-      <p className="text-center text-xs text-gray-400 mt-8">준호체크 v1.0.0</p>
-
       {/* Logout Button */}
-      <div className="px-4 pt-3 pb-10">
+      <div className="mx-5 pt-5 pb-3">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl border border-gray-200 bg-white text-gray-400 text-sm font-medium hover:text-red-500 hover:border-red-200 active:bg-red-50 transition-colors"
+          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl border border-gray-200 bg-white text-[14px] font-medium text-gray-500 hover:text-red-500 hover:border-red-200 active:bg-red-50 active:scale-[0.98] transition-all"
         >
           <LogOut size={16} />
           로그아웃
         </button>
       </div>
+
+      {/* App Version */}
+      <p className="text-center text-[12px] text-gray-300 pb-10">준호체크 v1.0.0</p>
     </div>
   );
 }

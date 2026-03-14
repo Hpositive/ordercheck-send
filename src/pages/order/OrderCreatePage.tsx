@@ -88,13 +88,13 @@ export default function OrderCreatePage() {
     items.some((item) => item.name.trim() && item.quantity > 0);
 
   const inputClass = (hasError: boolean) =>
-    `w-full bg-gray-50 border rounded-xl px-4 py-3 text-[14px] text-gray-900 placeholder-gray-300 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white ${
-      hasError ? 'border-red-300 bg-red-50/30' : 'border-gray-100'
+    `w-full bg-gray-50 border rounded-xl px-4 h-12 text-[14px] text-gray-900 placeholder-gray-300 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:bg-white ${
+      hasError ? 'border-red-300 bg-red-50/30' : 'border-gray-200'
     }`;
 
   if (loading) {
     return (
-      <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen">
+      <div className="max-w-[480px] mx-auto w-full bg-[#f7f8fa] min-h-screen">
         <Header title="발주하기" showBack />
         <Loading />
       </div>
@@ -103,7 +103,7 @@ export default function OrderCreatePage() {
 
   if (!partner) {
     return (
-      <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen">
+      <div className="max-w-[480px] mx-auto w-full bg-[#f7f8fa] min-h-screen">
         <Header title="발주하기" showBack />
         <div className="flex flex-col items-center justify-center py-24 animate-fade-in-up">
           <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
@@ -116,13 +116,13 @@ export default function OrderCreatePage() {
   }
 
   return (
-    <div className="max-w-[480px] mx-auto w-full bg-gray-50 min-h-screen pb-8">
+    <div className="max-w-[480px] mx-auto w-full bg-[#f7f8fa] min-h-screen pb-8">
       <Header title="발주하기" showBack />
 
       <div className="px-5 py-5 space-y-4 animate-fade-in-up">
         {/* Partner Info Card */}
-        <div className="bg-blue-50/70 border border-blue-100/60 rounded-2xl p-4 flex items-center gap-3.5">
-          <div className="w-14 h-14 rounded-xl bg-white shadow-sm overflow-hidden shrink-0">
+        <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex items-center gap-3.5">
+          <div className="w-14 h-14 rounded-xl bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)] overflow-hidden shrink-0">
             <img
               src={partner.thumbnail}
               alt={partner.name}
@@ -136,17 +136,17 @@ export default function OrderCreatePage() {
         </div>
 
         {/* Site Info Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5">
+        <div className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60 p-5">
           <div className="flex items-center gap-2 mb-5">
             <div className="w-6 h-6 rounded-md bg-blue-50 flex items-center justify-center">
               <MapPin size={13} className="text-blue-600" />
             </div>
-            <h3 className="text-[15px] font-bold text-gray-900">현장 정보</h3>
+            <h3 className="text-[16px] font-extrabold text-gray-900">현장 정보</h3>
           </div>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-[12px] font-medium text-gray-500 mb-1.5 ml-1">현장명</label>
+              <label className="block text-[13px] font-semibold text-gray-700 mb-2 ml-1">현장명</label>
               <input
                 type="text"
                 value={siteName}
@@ -159,7 +159,7 @@ export default function OrderCreatePage() {
               )}
             </div>
             <div>
-              <label className="block text-[12px] font-medium text-gray-500 mb-1.5 ml-1">현장주소</label>
+              <label className="block text-[13px] font-semibold text-gray-700 mb-2 ml-1">현장주소</label>
               <input
                 type="text"
                 value={siteAddress}
@@ -175,12 +175,12 @@ export default function OrderCreatePage() {
         </div>
 
         {/* Items Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5">
+        <div className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60 p-5">
           <div className="flex items-center gap-2 mb-5">
             <div className="w-6 h-6 rounded-md bg-blue-50 flex items-center justify-center">
               <Layers size={13} className="text-blue-600" />
             </div>
-            <h3 className="text-[15px] font-bold text-gray-900">시공 항목</h3>
+            <h3 className="text-[16px] font-extrabold text-gray-900">시공 항목</h3>
           </div>
 
           <div className="space-y-3">
@@ -189,7 +189,7 @@ export default function OrderCreatePage() {
               const hasNameError = attempted && !item.name.trim();
 
               return (
-                <div key={idx} className="bg-gray-50/80 rounded-xl p-4 relative">
+                <div key={idx} className="bg-gray-50 rounded-xl p-4 relative">
                   {/* Item Header */}
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
@@ -214,8 +214,8 @@ export default function OrderCreatePage() {
                     value={item.name}
                     onChange={(e) => updateItem(idx, 'name', e.target.value)}
                     placeholder="항목명을 입력하세요"
-                    className={`w-full bg-white border rounded-xl px-4 py-3 text-[14px] text-gray-900 placeholder-gray-300 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 mb-2.5 ${
-                      hasNameError ? 'border-red-300' : 'border-gray-100'
+                    className={`w-full bg-white border rounded-xl px-4 h-12 text-[14px] text-gray-900 placeholder-gray-300 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-100 focus:border-blue-500 mb-2.5 ${
+                      hasNameError ? 'border-red-300' : 'border-gray-200'
                     }`}
                   />
 
@@ -230,7 +230,7 @@ export default function OrderCreatePage() {
                         onChange={(e) =>
                           updateItem(idx, 'quantity', Math.max(1, parseInt(e.target.value) || 1))
                         }
-                        className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2.5 text-[14px] text-center text-gray-900 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-[14px] text-center text-gray-900 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
                       />
                     </div>
                     <div>
@@ -240,7 +240,7 @@ export default function OrderCreatePage() {
                         value={item.unit}
                         onChange={(e) => updateItem(idx, 'unit', e.target.value)}
                         placeholder="m2"
-                        className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2.5 text-[14px] text-center text-gray-900 placeholder-gray-300 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-[14px] text-center text-gray-900 placeholder-gray-300 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
                       />
                     </div>
                     <div>
@@ -252,7 +252,7 @@ export default function OrderCreatePage() {
                         onChange={(e) =>
                           updateItem(idx, 'unitPrice', Math.max(0, parseInt(e.target.value) || 0))
                         }
-                        className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2.5 text-[14px] text-right text-gray-900 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                        className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-[14px] text-right text-gray-900 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
                       />
                     </div>
                   </div>
@@ -271,7 +271,7 @@ export default function OrderCreatePage() {
             {/* Add Item - Dashed Card */}
             <button
               onClick={addItem}
-              className="w-full border-2 border-dashed border-gray-200 rounded-xl py-4 flex items-center justify-center gap-2 text-[13px] font-semibold text-gray-400 transition-all duration-200 active:border-blue-300 active:text-blue-500 active:bg-blue-50/30 hover:border-gray-300"
+              className="w-full border-2 border-dashed border-gray-300 rounded-xl p-3 flex items-center justify-center gap-2 text-[13px] font-semibold text-gray-400 transition-all duration-200 active:border-blue-300 active:text-blue-500 active:bg-blue-50/30 hover:border-gray-400"
             >
               <Plus size={18} />
               항목 추가
@@ -280,12 +280,12 @@ export default function OrderCreatePage() {
         </div>
 
         {/* Memo Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100/80 p-5">
+        <div className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100/60 p-5">
           <div className="flex items-center gap-2 mb-5">
             <div className="w-6 h-6 rounded-md bg-blue-50 flex items-center justify-center">
               <MessageSquare size={13} className="text-blue-600" />
             </div>
-            <h3 className="text-[15px] font-bold text-gray-900">추가 메모</h3>
+            <h3 className="text-[16px] font-extrabold text-gray-900">추가 메모</h3>
           </div>
 
           <textarea
@@ -293,14 +293,14 @@ export default function OrderCreatePage() {
             onChange={(e) => setMemo(e.target.value)}
             placeholder="시공 관련 참고사항을 입력하세요"
             rows={3}
-            className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-[14px] text-gray-900 placeholder-gray-300 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white resize-none"
+            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-[14px] text-gray-900 placeholder-gray-300 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-100 focus:border-blue-500 focus:bg-white resize-none"
           />
         </div>
 
         {/* Total Price Card */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl px-5 py-5 shadow-lg shadow-blue-600/15">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl px-5 py-5 shadow-[0_4px_12px_rgba(37,99,235,0.3)]">
           <p className="text-[13px] text-blue-200 font-medium mb-1">총 견적금액</p>
-          <p className="text-[28px] font-bold text-white tracking-tight">
+          <p className="text-[22px] font-extrabold text-white tracking-tight">
             {totalPrice.toLocaleString()}
             <span className="text-[16px] text-blue-200 font-semibold ml-1">원</span>
           </p>
@@ -312,7 +312,7 @@ export default function OrderCreatePage() {
           disabled={!isValid || submitting}
           className={`w-full h-14 rounded-2xl text-[16px] font-bold transition-all duration-200 flex items-center justify-center gap-2 ${
             isValid && !submitting
-              ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-600/25 active:shadow-sm active:translate-y-px'
+              ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-[0_4px_12px_rgba(37,99,235,0.3)] active:scale-[0.98] transition-transform'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed'
           }`}
         >
